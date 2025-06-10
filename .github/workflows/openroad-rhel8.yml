@@ -25,6 +25,18 @@ jobs:
           boost-devel make gcc gcc-c++ which
         alternatives --install /usr/bin/cmake cmake /usr/bin/cmake3 1
 
+    - name: Install SWIG 4.1.1 from source
+      run: |
+        SWIG_VER=4.1.1
+        curl -LO https://github.com/swig/swig/archive/refs/tags/v${SWIG_VER}.tar.gz
+        tar xzf v${SWIG_VER}.tar.gz
+        cd swig-${SWIG_VER}
+        ./autogen.sh
+        ./configure --prefix=/usr/local
+        make -j$(nproc)
+        make install
+        cd ..
+
     - name: Clone OpenROAD (your fork)
       run: |
         git clone --recursive https://github.com/xarge-labs/OpenROAD.git
