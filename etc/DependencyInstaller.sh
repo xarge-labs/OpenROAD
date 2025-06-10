@@ -892,10 +892,10 @@ case "${os}" in
     elif  [[ "${os}" == "Rocky Linux" ]]; then
         rhelVersion=$(rpm -q --queryformat '%{VERSION}' rocky-release | cut -d. -f1)
     fi
-        if [[ "${rhelVersion}" != "9" ]]; then
-            echo "ERROR: Unsupported ${rhelVersion} version. Only '9' is supported."
-            exit 1
-        fi
+        #if [[ "${rhelVersion}" != "9" ]]; then
+        #    echo "ERROR: Unsupported ${rhelVersion} version. Only '9' is supported."
+        #    exit 1
+        #fi
         if [[ ${CI} == "yes" ]]; then
             echo "WARNING: Installing CI dependencies is only supported on Ubuntu 22.04" >&2
         fi
