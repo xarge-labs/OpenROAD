@@ -38,22 +38,18 @@ jobs:
         make install
         cd ..
         
-    - name: Build Boost 1.83.0 from source
-      run: |
-        BOOST_VER=1.83.0
-        BOOST_DIR=boost_1_83_0
-        curl -LO https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VER}/source/${BOOST_DIR}.tar.bz2
-        tar -xjf ${BOOST_DIR}.tar.bz2
-        cd ${BOOST_DIR}
-        ./bootstrap.sh --prefix=/usr/local/boost
-        ./b2 install --with-iostreams --with-filesystem --with-system --with-program_options -j$(nproc)
-
-
     - name: Clone OpenROAD (your fork)
       run: |
         git clone --recursive https://github.com/xarge-labs/OpenROAD.git
         cd OpenROAD
         git submodule update --init --recursive
+        
+    - name: Run OpenROAD dependency installer (-common -local)
+      working-directory: OpenROAD
+      run: |
+        ./etc/DependencyInstaller.sh -common -local
+        echo "$PWD/local/bin" >> $GITHUB_PATH
+        echo "LD_LIBRARY_PATH=$PWD/local/lib" >> $GITHUB_ENV
 
     - name: Build OpenROAD
       run: |
