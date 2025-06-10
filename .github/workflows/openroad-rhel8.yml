@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: quay.io/centos/centos:stream8  # RHEL8-compatible
+      image: rockylinux:8
 
     steps:
     - name: Install dependencies
