@@ -23,7 +23,7 @@ jobs:
           libffi-devel tcl-devel tk-devel \
           readline-devel zlib-devel \
           wget patch \
-          boost-devel make gcc gcc-c++ which
+          boost-devel boost-iostreams-devel make gcc gcc-c++ which
         alternatives --install /usr/bin/cmake cmake /usr/bin/cmake3 1
 
     - name: Install SWIG 4.1.1 from source
