@@ -1,0 +1,50 @@
+name: Build OpenROAD (Red Hat 8)
+
+on:
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/centos/centos:stream8  # RHEL8-compatible
+
+    steps:
+    - name: Install dependencies
+      run: |
+        dnf -y groupinstall "Development Tools"
+        dnf -y install \
+          git cmake3 \
+          python3 python3-pip \
+          bison flex \
+          libX11-devel libXrender-devel libXrandr-devel \
+          libxcb-devel xcb-util-image-devel \
+          libffi-devel tcl-devel tk-devel \
+          readline-devel zlib-devel \
+          wget patch \
+          boost-devel make gcc gcc-c++ which
+        alternatives --install /usr/bin/cmake cmake /usr/bin/cmake3 1
+
+    - name: Clone OpenROAD (your fork)
+      run: |
+        git clone --recursive https://github.com/xarge-labs/OpenROAD.git
+        cd OpenROAD
+        git submodule update --init --recursive
+
+    - name: Build OpenROAD
+      run: |
+        cd OpenROAD
+        mkdir build && cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=/openroad-bin
+        make -j$(nproc)
+        make install
+
+    - name: Package binary
+      run: |
+        tar czf openroad-rhel8.tar.gz -C / openroad-bin
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: openroad-rhel8
+        path: openroad-rhel8.tar.gz
