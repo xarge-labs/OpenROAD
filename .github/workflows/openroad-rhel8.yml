@@ -47,7 +47,7 @@ jobs:
     - name: Run OpenROAD dependency installer (-common -local)
       working-directory: OpenROAD
       run: |
-        ./etc/DependencyInstaller.sh -common -local
+        sudo ./etc/DependencyInstaller.sh -all
         echo "$PWD/local/bin" >> $GITHUB_PATH
         echo "LD_LIBRARY_PATH=$PWD/local/lib" >> $GITHUB_ENV
 
